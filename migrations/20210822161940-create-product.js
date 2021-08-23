@@ -16,6 +16,10 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      categoryIds: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,

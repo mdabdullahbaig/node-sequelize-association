@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const HttpError = require("./util/HttpError");
+const roleRoute = require("./routes/role-route");
 const userRoute = require("./routes/user-route");
 const productRoute = require("./routes/product-route");
+const categoryRoute = require("./routes/category-route");
 const { sequelize } = require("./models");
 
 const app = express();
@@ -15,8 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Route middleware
+app.use("/api/roles", roleRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/categories", categoryRoute);
 
 app.use((req, res, next) => {
   const error = new HttpError("Something went wrong.", 500);

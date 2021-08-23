@@ -2,7 +2,7 @@ const { User } = require("../models");
 const HttpError = require("../util/HttpError");
 
 const createUser = async (req, res, next) => {
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, email, roleId } = req.body;
 
   let createdUser;
   try {
@@ -10,6 +10,7 @@ const createUser = async (req, res, next) => {
       firstName,
       lastName,
       email,
+      roleId,
     });
   } catch (err) {
     const error = new HttpError(err.message, 500);
@@ -35,7 +36,7 @@ const getUserById = async (req, res, next) => {
   try {
     user = await User.findOne({
       where: { _id: req.params.id },
-      include: "products",
+      include: ["products", "role"],
     });
   } catch (err) {
     const error = new HttpError(err.message, 500);
