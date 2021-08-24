@@ -1,12 +1,12 @@
-const { Product, User } = require("../models");
+const { Product, User, ProductCategory } = require("../models");
 const HttpError = require("../util/HttpError");
 
 const createProduct = async (req, res, next) => {
-  const { name, description, price, user_id } = req.body;
+  const { name, description, price, userId, categoryId } = req.body;
 
   let createdProduct;
   try {
-    const user = await User.findOne({ where: { _id: user_id } });
+    const user = await User.findOne({ where: { _id: userId } });
 
     if (!user) {
       const error = new HttpError("User with this id does not exists.", 500);
@@ -19,10 +19,18 @@ const createProduct = async (req, res, next) => {
       price,
       userId: user.id,
     });
+
+    if (categoryId && createdProduct.id) {
+      ProductCategory.create({
+        categoryId,
+        productId: createdProduct.id,
+      });
+    }
   } catch (err) {
     const error = new HttpError(err.message, 500);
     return next(error);
   }
+
   res.status(201).json(createdProduct);
 };
 
